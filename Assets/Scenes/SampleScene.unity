@@ -319,7 +319,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f1ad586668d834644b8076c3e4f8466f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerGO: {fileID: 0}
+  playerGO: {fileID: 8226868776927869847, guid: 7ca2cc56671172f48a01aca8718723df,
+    type: 3}
   myAddress: 
   newPlayers: []
   droppedPlayers: []
