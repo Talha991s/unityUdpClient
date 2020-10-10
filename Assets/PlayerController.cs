@@ -7,17 +7,16 @@ public class PlayerController : MonoBehaviour
 {
     private Rigidbody rb;
     public bool active = false;
-    int speed = 10;
-    // Start is called before the first frame update
+    //int speed = 10;
+  
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         if(gameObject.name == FindObjectOfType<NetworkMan>().myAddress){
             active = true;
         }
-        
     }
-    // Update is called once per frame
+    
     void Update()
     {
         if (!active)
