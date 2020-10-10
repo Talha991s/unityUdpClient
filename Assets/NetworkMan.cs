@@ -38,26 +38,33 @@ public class NetworkMan : MonoBehaviour
 
         udp.BeginReceive(new AsyncCallback(OnReceived), udp);
 
-        InvokeRepeating("HeartBeat", 1, 1);
+        InvokeRepeating("HeartBeat", 1, 1/30f);
     }
 
     void OnDestroy(){
         udp.Dispose();
     }
 
+    //[Serializable]
+    //    public struct receivedColor
+    //    {
+    //        public float R;
+    //        public float G;
+    //        public float B;
+    //    }
     [Serializable]
-        public struct receivedColor
-        {
-            public float R;
-            public float G;
-            public float B;
-        }
+    public struct Position
+    {
+        public float x;
+        public float y;
+        public float z;
+    }
 
     [Serializable]
     public class Player
     {
         public string id;
-        public receivedColor color;
+        public Position position;
     }
 
     [Serializable]
@@ -200,7 +207,7 @@ public class NetworkMan : MonoBehaviour
                 if (player.id == myAddress)
                     continue;
                 currentPlayers.Add(player.id, Instantiate(playerGO, new Vector3(0, 0, 0), Quaternion.identity));
-                currentPlayers[player.id].GetComponent<Renderer>().material.color = new Color(player.color.R, player.color.G, player.color.B);
+                //currentPlayers[player.id].GetComponent<Renderer>().material.color = new Color(player.color.R, player.color.G, player.color.B);
                 currentPlayers[player.id].name = player.id;
             }
             initialSetofPlayers.players = new Player[0];
@@ -212,8 +219,11 @@ public class NetworkMan : MonoBehaviour
         {
             foreach (NetworkMan.Player player in lastestGameState.players)
             {
-                string playerID = player.id;
-                currentPlayers[player.id].GetComponent<Renderer>().material.color = new Color(player.color.R, player.color.G, player.color.B);
+                if (myAddress != player.id)
+                {
+                    //string playerID = player.id;
+                    currentPlayers[player.id].transform.position = new Vector3(player.position.x, player.position.y, player.position.z);
+                }
             }
             lastestGameState.players = new Player[0];
         }
@@ -236,6 +246,9 @@ public class NetworkMan : MonoBehaviour
     
     void HeartBeat(){
         Byte[] sendBytes = Encoding.ASCII.GetBytes("heartbeat");
+        udp.Send(sendBytes, sendBytes.Length);
+
+        sendBytes = Encoding.ASCII.GetBytes(JsonUtility.ToJson(currentPlayers[myAddress].transform.position));
         udp.Send(sendBytes, sendBytes.Length);
     }
 
