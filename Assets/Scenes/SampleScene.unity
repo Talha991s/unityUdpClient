@@ -321,7 +321,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerGO: {fileID: 8226868776927869847, guid: 7ca2cc56671172f48a01aca8718723df,
     type: 3}
-  myAddress: 
+  myAddress: 127.0.0.1
   newPlayers: []
   droppedPlayers: []
   lastestGameState:
